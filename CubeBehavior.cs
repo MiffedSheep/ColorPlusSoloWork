@@ -2,7 +2,7 @@
 using System.Collections;
 
 public class CubeBehavior : MonoBehaviour {
-public bool Active, boomBool, Clicked, Gray, Colored;
+public bool Active, boomBool, Clicked, Gray, Colored,CubeIsClicked,Ridge;
 public int x,y;
 public GameController gameController;
 public GameObject aCube;
@@ -12,13 +12,15 @@ public Color lastColor;
 	Active=false;
 	Clicked=false;
 	Gray=false;
+	Ridge=false;
 	gameController = GameObject.Find ("GameController").GetComponent<GameController> ();
 	lastColor = gameController.cubes[x,y].renderer.material.color;	
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	if(Colored==false){	
+		
+	if(Colored==false && !Gray){	
 			this.gameObject.renderer.material.color=Color.white;			
 		}
 	if(Clicked){
@@ -37,38 +39,12 @@ public Color lastColor;
 		 Gray=true;
 		}*/
 	}
-	public bool IsCubeTrue(int x, int y){
-		
-				if(gameController.cubes[x+1,y+1].GetComponent<CubeBehavior>().Clicked==true || 
-				gameController.cubes[x+1,y-1].GetComponent<CubeBehavior>().Clicked==true ||
-				gameController.cubes[x-1,y+1].GetComponent<CubeBehavior>().Clicked==true ||
-				gameController.cubes[x-1,y-1].GetComponent<CubeBehavior>().Clicked==true ||
-				gameController.cubes[x+1,y].GetComponent<CubeBehavior>().Clicked==true ||
-				gameController.cubes[x-1,y].GetComponent<CubeBehavior>().Clicked==true ||
-				gameController.cubes[x,y+1].GetComponent<CubeBehavior>().Clicked==true ||
-				gameController.cubes[x,y-1].GetComponent<CubeBehavior>().Clicked==true ||
-				gameController.cubes[x,y].GetComponent<CubeBehavior>().Clicked==true ){
-			   
-				return true;
-			
-				}
-				else if(gameController.cubes[x+1,y+1].GetComponent<CubeBehavior>().Clicked==false || 
-				gameController.cubes[x+1,y-1].GetComponent<CubeBehavior>().Clicked==false ||
-				gameController.cubes[x-1,y+1].GetComponent<CubeBehavior>().Clicked==false ||
-				gameController.cubes[x-1,y-1].GetComponent<CubeBehavior>().Clicked==false ||
-				gameController.cubes[x+1,y].GetComponent<CubeBehavior>().Clicked==false ||
-				gameController.cubes[x-1,y].GetComponent<CubeBehavior>().Clicked==false ||
-				gameController.cubes[x,y+1].GetComponent<CubeBehavior>().Clicked==false ||
-				gameController.cubes[x,y-1].GetComponent<CubeBehavior>().Clicked==false ||
-				gameController.cubes[x,y].GetComponent<CubeBehavior>().Clicked==false ){
-				return false;
-		}
-	}
+	
 	
 	void OnMouseDown(){
-		
+		gameController.IsCubeTrue(x,y);
 		if ((Active == false && 
-				Colored==false)	&& 
+				Colored==false && tag=="NotRidge")	&& 
 				(gameController.cubes[x+1,y+1].GetComponent<CubeBehavior>().Colored==true || 
 				gameController.cubes[x+1,y-1].GetComponent<CubeBehavior>().Colored==true ||
 				gameController.cubes[x-1,y+1].GetComponent<CubeBehavior>().Colored==true ||
@@ -76,7 +52,7 @@ public Color lastColor;
 				gameController.cubes[x+1,y].GetComponent<CubeBehavior>().Colored==true ||
 				gameController.cubes[x-1,y].GetComponent<CubeBehavior>().Colored==true ||
 				gameController.cubes[x,y+1].GetComponent<CubeBehavior>().Colored==true ||
-				gameController.cubes[x,y-1].GetComponent<CubeBehavior>().Colored==true) && IsCubeTrue (x,y))
+				gameController.cubes[x,y-1].GetComponent<CubeBehavior>().Colored==true) && CubeIsClicked==true)
 		{
 			lastColor= gameController.cubes[gameController.lastX,gameController.lastY].renderer.material.color;
 			gameController.cubes[gameController.lastX,gameController.lastY].renderer.material.color = Color.white;
